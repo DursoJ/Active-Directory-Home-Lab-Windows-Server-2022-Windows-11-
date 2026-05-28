@@ -1,5 +1,7 @@
 # Active Directory Home Lab (Windows Server 2022 + Windows 11)
 
+---
+
 ## Overview
 
 This project is a home lab designed to simulate a small enterprise Active Directory environment. It demonstrates core Windows Server administration concepts including domain services, DNS, Group Policy, and role-based access control.
@@ -11,8 +13,8 @@ The environment was built using virtualization and configured from scratch to re
 ## Lab Architecture
 
 - Domain: `lab.local`
-- Domain Controller: dc01
-- Client Machine: client1
+- Domain Controller: DC01
+- Client Machine: Client1
 - Network Configuration:
   - NAT Adapter: Internet access
   - Internal Network (locallab): Domain communication
@@ -34,6 +36,7 @@ The environment was built using virtualization and configured from scratch to re
 
 ## Active Directory Configuration
 
+### Domain Setup
 - Created domain: `lab.local`
 - Promoted DC01 as Domain Controller
 - Configured DNS integrated with Active Directory
@@ -44,7 +47,7 @@ The environment was built using virtualization and configured from scratch to re
   - Computers
   - Groups
 
-### User Accounts
+### Users
 - HR users
 - Finance users
 - IT users
@@ -54,26 +57,27 @@ The environment was built using virtualization and configured from scratch to re
 - Finance
 - IT
 
-Role-based access control was implemented using security groups.
+Role-based access control (RBAC) was implemented using security groups.
 
 ---
 
 ## File Server Configuration
 
-A centralized file share was created on DC01:
+A centralized file share was created on DC01 using SMB.
 
+### Share Location
 - `\\DC01\Shares$` (hidden share)
 
-### Folder Structure:
+### Folder Structure
 - HR
 - Finance
 - IT
 
-### Permissions Model:
+### Permissions Model
 - Share permissions: Authenticated Users (Change)
 - NTFS permissions: Controlled via security groups
 
-Access is restricted based on group membership.
+Access is restricted based on group membership (least privilege model).
 
 ---
 
@@ -81,12 +85,12 @@ Access is restricted based on group membership.
 
 Group Policy was used to automate user environment configuration.
 
-### Drive Mapping Policy:
+### Drive Mapping Policy
 - HR → H: drive
 - Finance → F: drive
 - IT → I: drive
 
-### Configuration Method:
+### Configuration Method
 - Group Policy Preferences
 - Item-level targeting based on security groups
 
@@ -100,230 +104,157 @@ This lab implements Role-Based Access Control (RBAC):
 - Groups control NTFS permissions
 - Access to resources is centrally managed through Active Directory
 
-This follows the principle of least privilege.
-
 ---
 
 ## Validation & Testing
 
-The following were verified during testing:
+The environment was validated through the following tests:
 
-- Domain join successful on Windows 11 client
-- DNS resolution working correctly
-- Group Policy applied successfully using gpupdate
-- File access restricted based on group membership
-- Mapped drives applied based on user role
-
----
-
-## Key Skills Demonstrated
-
-- Active Directory administration
-- DNS configuration and troubleshooting
-- Group Policy management
-- Windows file sharing and NTFS permissions
-- Role-based access control (RBAC)
-- Virtualized network configuration
-- Windows client/server integration
+- Successful domain join of Windows 11 client
+- DNS resolution of `lab.local`
+- Group Policy application using `gpupdate /force`
+- File share access via `\\DC01\Shares$`
+- Drive mapping based on user groups
+- NTFS permission enforcement
 
 ---
 
 ## Screenshots & Validation
 
-This section documents the key components of the Active Directory lab environment. Each screenshot represents a functional validation of a specific service or configuration.
+Each screenshot represents a functional validation of a core system component.
 
 ---
 
 ### 01 - Active Directory Structure
-This screenshot shows the Active Directory Organizational Unit (OU) structure created on the domain controller.
-
-It includes:
+Shows the Organizational Unit (OU) structure within Active Directory:
 - LAB OU
-- Users container
-- Groups container
-- Computers container
-
-This validates that the domain structure was properly designed and organized to support centralized identity management.
+- Users
+- Groups
+- Computers
 
 ---
 
 ### 02 - Users and Security Groups
-This screenshot displays the configured user accounts and security groups within Active Directory.
-
-It includes:
-- HR, Finance, and HelpDesk security groups
-- User accounts assigned to a group
-
-This demonstrates role-based access control (RBAC) implementation using Active Directory security groups.
+Shows created user accounts and security groups:
+- HR, Finance, IT groups
+- Users assigned to groups
 
 ---
 
 ### 03 - DNS Resolution Test
-This screenshot shows DNS name resolution using `nslookup` for the domain `lab.local`.
-
-The output confirms:
-- The domain name resolves successfully
-- DNS is being handled by the Domain Controller
-
-This validates that Active Directory-integrated DNS is functioning correctly.
+Shows DNS lookup for `lab.local`, confirming:
+- Proper DNS resolution
+- Domain Controller handling DNS services
 
 ---
 
 ### 04 - Network Configuration (Client Machine)
-This screenshot shows the network configuration of the Windows 11 client using `ipconfig /all`.
-
-It confirms:
-- Correct IP address assignment within the internal network
-- DNS server pointing to the Domain Controller
-
-This ensures proper network communication between client and domain services.
+Shows `ipconfig /all` output confirming:
+- Correct internal IP assignment
+- DNS pointing to Domain Controller
 
 ---
 
 ### 05 - Domain Login Verification
-This screenshot shows the logged-in domain user using the `whoami` command.
-
-It confirms:
-- The Windows 11 machine is successfully joined to the `lab.local` domain
-- User authentication is being handled by Active Directory
+Shows `whoami` output confirming:
+- Successful domain authentication
+- User logged into `lab.local`
 
 ---
 
-### 06 - Mapped Network Drives
-This screenshot shows automatically mapped network drives on the Windows 11 client.
-
-It confirms:
-- Group Policy-driven drive mapping is functioning correctly
-- Users receive different drives based on group membership
-
-This demonstrates Group Policy Preferences and user-based configuration.
+### 06 - File Share Access
+Shows access to:
+- `\\DC01\Shares$`
+- HR, Finance, IT folders
 
 ---
 
 ### 07 - Group Policy Configuration
-This screenshot shows the Group Policy Management Console (GPMC) configuration for drive mapping.
-
-It includes:
-- Drive mapping policy creation
-- Assignment of drive letters based on security groups
-
-This validates centralized configuration management using Group Policy.
+Shows Group Policy Management Console configuration:
+- Drive mapping policy
+- Group-based drive assignments
 
 ---
 
 ### 08 - NTFS Permissions
-This screenshot shows NTFS security permissions configured on the Finance shared folder.
-
-It includes:
-- Security group-based access control
-- Assigned permissions such as Modify and Read
-
-This demonstrates file-level security enforcement using NTFS permissions.
+Shows security permissions on shared folders:
+- Group-based access control
+- Least privilege enforcement
 
 ---
 
-### 9 - Group Policy Application Verification
-This screenshot shows the output of `gpresult /r` on the client machine.
+### 09 - Group Policy Application Verification
+Shows `gpresult /r` output confirming:
+- Applied Group Policy Objects
+- Drive mapping policies active
 
-It confirms:
-- Group Policy Objects are successfully applied
-- Drive mapping and configuration policies are active
-
-This validates end-to-end Group Policy deployment.
+---
 
 ## How I Built This Environment
 
-This Active Directory lab was built from scratch using a virtualized environment to simulate a small enterprise network. The goal was to replicate core Windows domain infrastructure and demonstrate identity management, network services, and centralized administration.
-
----
-
 ### 1. Virtual Environment Setup
-Two virtual machines were created using Oracle VM VirtualBox:
+- Created two VMs using VirtualBox:
+  - Windows Server 2022 (DC01)
+  - Windows 11 (Client1)
 
-- Windows Server 2022 (DC01)
-- Windows 11 (Client machine)
-
-Two network adapters were configured:
-- NAT Adapter for internet access and updates
-- Internal Network (locallab) for isolated domain communication
+- Configured networking:
+  - NAT for internet access
+  - Internal Network (locallab) for domain communication
 
 ---
 
 ### 2. Domain Controller Configuration
-Windows Server 2022 was promoted to a Domain Controller.
-
-The following roles were installed:
-- Active Directory Domain Services (AD DS)
-- DNS Server
-
-A new forest was created with the domain:
-- lab.local
-
-The server was configured with a static IP address to ensure stable DNS resolution and domain services.
+- Installed AD DS and DNS roles
+- Promoted server to Domain Controller
+- Created forest: `lab.local`
+- Configured static IP for DNS stability
 
 ---
 
 ### 3. Active Directory Structure
-Within Active Directory, an organizational structure was created to simulate a real business environment.
-
-This included:
-- A top-level OU for LAB
-- Sub-OUs for Users, Computers, and Groups
-- Security groups for HR, Finance, and HelpDesk departments
-
-User accounts were created and assigned to their respective security groups to enable role-based access control.
+- Created LAB OU structure
+- Created users and security groups
+- Assigned users to appropriate groups for RBAC
 
 ---
 
 ### 4. File Sharing and Permissions
-A centralized file share was created on DC01 using SMB.
-
-The following folder structure was implemented:
-- HR
-- Finance
-- IT
-
-Access to these folders was controlled using NTFS permissions tied to Active Directory security groups, enforcing least-privilege access.
+- Created SMB share on DC01
+- Configured folder structure:
+  - HR, Finance, IT
+- Applied NTFS permissions using security groups
 
 ---
 
 ### 5. Group Policy Configuration
-Group Policy Objects (GPOs) were configured using the Group Policy Management Console.
-
-A drive mapping policy was created to automatically map network drives based on group membership:
-- HR users → H: drive
-- Finance users → F: drive
-- IT users → I: drive
-
-Group Policy Preferences with item-level targeting were used to apply settings dynamically.
+- Created GPO for drive mapping
+- Configured:
+  - HR → H:
+  - Finance → F:
+  - IT → I:
+- Used item-level targeting for group-based assignment
 
 ---
 
-### 6. Client Machine Setup
-A Windows 11 virtual machine was configured and joined to the `lab.local` domain.
-
-The client was validated to ensure:
-- Proper DNS resolution pointing to the Domain Controller
-- Successful domain authentication
-- Application of Group Policy settings
+### 6. Client Setup
+- Joined Windows 11 machine to domain
+- Verified DNS configuration
+- Confirmed Group Policy application
 
 ---
 
-### 7. Validation and Testing
-The environment was tested end-to-end by verifying:
+### 7. Validation & Testing
+- Verified domain authentication
+- Tested DNS resolution
+- Confirmed file access permissions
+- Validated GPO drive mapping behavior
 
-- Domain join functionality
-- DNS name resolution
-- User authentication via Active Directory
-- Access to shared network resources
-- Group Policy drive mapping behavior
-
-This confirmed that identity management, authentication, and access control were functioning as intended.
+---
 
 ## Future Improvements
 
 - Add second Domain Controller for redundancy
-- Deploy DHCP for automatic IP configuration
-- Implement file auditing and logging
-- Add firewall segmentation using pfSense
-- Automate user and group creation with PowerShell
+- Implement DHCP server role
+- Add file auditing and logging
+- Introduce firewall segmentation (pfSense)
+- Automate user/group creation using PowerShell
