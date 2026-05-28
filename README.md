@@ -128,6 +128,109 @@ The following were verified during testing:
 
 ---
 
+## Screenshots & Validation
+
+This section documents the key components of the Active Directory lab environment. Each screenshot represents a functional validation of a specific service or configuration.
+
+---
+
+### 01 - Active Directory Structure
+This screenshot shows the Active Directory Organizational Unit (OU) structure created on the domain controller.
+
+It includes:
+- LAB OU
+- Users container
+- Groups container
+- Computers container
+
+This validates that the domain structure was properly designed and organized to support centralized identity management.
+
+---
+
+### 02 - Users and Security Groups
+This screenshot displays the configured user accounts and security groups within Active Directory.
+
+It includes:
+- HR, Finance, and HelpDesk security groups
+- User accounts assigned to a group
+
+This demonstrates role-based access control (RBAC) implementation using Active Directory security groups.
+
+---
+
+### 03 - DNS Resolution Test
+This screenshot shows DNS name resolution using `nslookup` for the domain `lab.local`.
+
+The output confirms:
+- The domain name resolves successfully
+- DNS is being handled by the Domain Controller
+
+This validates that Active Directory-integrated DNS is functioning correctly.
+
+---
+
+### 04 - Network Configuration (Client Machine)
+This screenshot shows the network configuration of the Windows 11 client using `ipconfig /all`.
+
+It confirms:
+- Correct IP address assignment within the internal network
+- DNS server pointing to the Domain Controller
+
+This ensures proper network communication between client and domain services.
+
+---
+
+### 05 - Domain Login Verification
+This screenshot shows the logged-in domain user using the `whoami` command.
+
+It confirms:
+- The Windows 11 machine is successfully joined to the `lab.local` domain
+- User authentication is being handled by Active Directory
+
+---
+
+### 06 - Mapped Network Drives
+This screenshot shows automatically mapped network drives on the Windows 11 client.
+
+It confirms:
+- Group Policy-driven drive mapping is functioning correctly
+- Users receive different drives based on group membership
+
+This demonstrates Group Policy Preferences and user-based configuration.
+
+---
+
+### 07 - Group Policy Configuration
+This screenshot shows the Group Policy Management Console (GPMC) configuration for drive mapping.
+
+It includes:
+- Drive mapping policy creation
+- Assignment of drive letters based on security groups
+
+This validates centralized configuration management using Group Policy.
+
+---
+
+### 08 - NTFS Permissions
+This screenshot shows NTFS security permissions configured on the Finance shared folder.
+
+It includes:
+- Security group-based access control
+- Assigned permissions such as Modify and Read
+
+This demonstrates file-level security enforcement using NTFS permissions.
+
+---
+
+### 9 - Group Policy Application Verification
+This screenshot shows the output of `gpresult /r` on the client machine.
+
+It confirms:
+- Group Policy Objects are successfully applied
+- Drive mapping and configuration policies are active
+
+This validates end-to-end Group Policy deployment.
+
 ## Future Improvements
 
 - Add second Domain Controller for redundancy
