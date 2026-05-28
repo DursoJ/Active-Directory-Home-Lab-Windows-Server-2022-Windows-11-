@@ -231,6 +231,95 @@ It confirms:
 
 This validates end-to-end Group Policy deployment.
 
+## How I Built This Environment
+
+This Active Directory lab was built from scratch using a virtualized environment to simulate a small enterprise network. The goal was to replicate core Windows domain infrastructure and demonstrate identity management, network services, and centralized administration.
+
+---
+
+### 1. Virtual Environment Setup
+Two virtual machines were created using Oracle VM VirtualBox:
+
+- Windows Server 2022 (DC01)
+- Windows 11 (Client machine)
+
+Two network adapters were configured:
+- NAT Adapter for internet access and updates
+- Internal Network (locallab) for isolated domain communication
+
+---
+
+### 2. Domain Controller Configuration
+Windows Server 2022 was promoted to a Domain Controller.
+
+The following roles were installed:
+- Active Directory Domain Services (AD DS)
+- DNS Server
+
+A new forest was created with the domain:
+- lab.local
+
+The server was configured with a static IP address to ensure stable DNS resolution and domain services.
+
+---
+
+### 3. Active Directory Structure
+Within Active Directory, an organizational structure was created to simulate a real business environment.
+
+This included:
+- A top-level OU for LAB
+- Sub-OUs for Users, Computers, and Groups
+- Security groups for HR, Finance, and HelpDesk departments
+
+User accounts were created and assigned to their respective security groups to enable role-based access control.
+
+---
+
+### 4. File Sharing and Permissions
+A centralized file share was created on DC01 using SMB.
+
+The following folder structure was implemented:
+- HR
+- Finance
+- IT
+
+Access to these folders was controlled using NTFS permissions tied to Active Directory security groups, enforcing least-privilege access.
+
+---
+
+### 5. Group Policy Configuration
+Group Policy Objects (GPOs) were configured using the Group Policy Management Console.
+
+A drive mapping policy was created to automatically map network drives based on group membership:
+- HR users → H: drive
+- Finance users → F: drive
+- IT users → I: drive
+
+Group Policy Preferences with item-level targeting were used to apply settings dynamically.
+
+---
+
+### 6. Client Machine Setup
+A Windows 11 virtual machine was configured and joined to the `lab.local` domain.
+
+The client was validated to ensure:
+- Proper DNS resolution pointing to the Domain Controller
+- Successful domain authentication
+- Application of Group Policy settings
+
+---
+
+### 7. Validation and Testing
+The environment was tested end-to-end by verifying:
+
+- Domain join functionality
+- DNS name resolution
+- User authentication via Active Directory
+- Access to shared network resources
+- Group Policy drive mapping behavior
+
+This confirmed that identity management, authentication, and access control were functioning as intended.
+
 ## Future Improvements
 
 - Add second Domain Controller for redundancy
